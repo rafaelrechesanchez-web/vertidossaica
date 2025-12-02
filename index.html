@@ -49,20 +49,28 @@
         <script src="data/Vertidos_5.js"></script>
         <script>
         var highlightLayer;
-        function highlightFeature(e) {
-            highlightLayer = e.target;
+		function highlightFeature(e) {
+    highlightLayer = e.target;
+    var props = e.target.feature.properties;
 
-            if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
-              highlightLayer.setStyle({
-                color: '#ffff00',
-              });
-            } else {
-              highlightLayer.setStyle({
-                fillColor: '#ffff00',
-                fillOpacity: 0.5
-              });
-            }
-        }
+    // ❌ EXCLUIR: si es la cuenca que NO debe resaltarse
+    // Cambia 'nombre' y 'Cuenca Mediterránea' por tu campo y valor reales
+    if (props && props.OBJECTID === 1) {
+        return; // No hacer nada → no resaltar
+    }
+
+    // ✅ RESALTAR: todo lo demás como antes
+    if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
+        highlightLayer.setStyle({
+            color: '#ffff00',
+        });
+    } else {
+        highlightLayer.setStyle({
+            fillColor: '#ffff00',
+            fillOpacity: 0.5
+        });
+    }
+}
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
         })
