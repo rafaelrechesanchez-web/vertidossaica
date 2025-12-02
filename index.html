@@ -245,7 +245,10 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_Ros_2_0() {
+        function style_Ros_2_0(feature) {
+			var zoom = map.getZoom();
+			var baseWeight = 1.0;
+			var weight = Math.max(1, Math.min(10, baseWeight + (zoom - 8) * 0.4));
             return {
                 pane: 'pane_Ros_2',
                 opacity: 1,
@@ -253,7 +256,7 @@
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
-                weight: 1.0,
+                weight: weight,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -270,6 +273,11 @@
             onEachFeature: pop_Ros_2,
             style: style_Ros_2_0,
         });
+		map.on('zoomend', function() {
+			layer_Ros_2.eachLayer(function(layer) {
+                layer.setStyle(style_Ros_2_0(layer.feature));
+			});
+		});
         bounds_group.addLayer(layer_Ros_2);
         map.addLayer(layer_Ros_2);
         function pop_EAASAICA_3(feature, layer) {
